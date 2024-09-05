@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Produtos{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/product_list.css')}}">
+{% endblock %}
+
+
+{% block body %}
+<h1 class="text-center mb-4">Lista de produtos</h1>
+
+<div class="user-info">
+  {% if user %}
+  <div class="text-end mb-3">
+    <p><strong>Usuário atual:</strong> <span id="loginUser">{{ user }}</span></p>
+  </div>
+  {% endif %}
+</div>
+
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Nome</th>
+    <th>Quantidade</th>
+    <th>Preço</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>1</td>
+    <td>Produto A</td>
+    <td>10</td>
+    <td>R$100.00</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>Produto B</td>
+    <td>5</td>
+    <td>R$50.00</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>Produto C</td>
+    <td>20</td>
+    <td>R$200.00</td>
+  </tr>
+  </tbody>
+</table>
+{% endblock %}
