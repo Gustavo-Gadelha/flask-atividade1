@@ -1,15 +1,7 @@
-from pathlib import Path
-
-from dotenv import load_dotenv
 from flask import render_template, request, redirect, session
 
-from app import create_app
+from app import create_app, db_manager
 from app.util.validation import validate_user, validade_product
-
-env_path: Path = Path(__file__).parent / '.env'
-
-if env_path.exists():
-    load_dotenv(env_path)
 
 app = create_app('development')
 
@@ -75,10 +67,12 @@ def product_register():
 
         return redirect('/product/list')
 
+
 @app.route('/user/logout', methods=['GET'])
 def user_logout():
     session.clear()
     return redirect('/')
+
 
 if __name__ == '__main__':
     app.run()
