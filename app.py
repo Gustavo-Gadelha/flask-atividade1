@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, session
 
-from app import create_app, db_manager
+from app import create_app
 from app.util.validation import validate_user, validade_product
 
 app = create_app('development')

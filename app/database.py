@@ -18,11 +18,20 @@ class DatabaseManager:
 
         with current_app.open_resource('schema.sql') as schema:
             sql = schema.read().decode('utf8')
+            self.execute(sql)
+
+    def execute(self, query, params=None, fetch=False, one=False):
+        connection = self.get_connection()
 
         try:
             with connection:
                 with connection.cursor() as cur:
-                    cur.execute(sql)
+                    cur.execute(query, params)
+
+                    if fetch and one:
+                        return cur.fetchone()
+                    if fetch and not one:
+                        return cur.fetchall()
 
         except psycopg2.Error as e:
             print(f'Error ao executar query: {e}')
