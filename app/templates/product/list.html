@@ -6,17 +6,16 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/product_list.css')}}">
 {% endblock %}
 
-
 {% block body %}
 <h1 class="text-center mb-4">Lista de produtos</h1>
 
-<div class="user-info">
+<div class="text-end mb-4">
   {% if user %}
-  <div class="text-end mb-3">
-    <p><strong>Usuário atual:</strong> <span id="loginUser">{{ user }}</span></p>
-  </div>
+  <p><strong>Usuário atual:</strong> <span id="user">{{ user }}</span></p>
   {% endif %}
 </div>
+
+{% include 'product/register.html' %}
 
 <table class="table table-striped">
   <thead>

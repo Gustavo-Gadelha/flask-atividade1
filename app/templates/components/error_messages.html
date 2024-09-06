@@ -1,0 +1,9 @@
+{% if error_messages %}
+<div class="alert alert-warning my-3" role="alert">
+  <h4 class="alert-heading">Aviso</h4>
+  <hr>
+  {% for error in error_messages %}
+  <p class="ml-1 mb-1">{{ error }}</p>
+  {% endfor %}
+</div>
+{% endif %}

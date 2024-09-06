@@ -7,13 +7,7 @@
   <div class="col-md-4">
     <h2 class="text-center">Login</h2>
 
-    {% if error_messages %}
-    <div class="alert alert-danger my-3" role="alert">
-      {% for error in error_messages %}
-      <p class="mb-0">{{ error }}</p>
-      {% endfor %}
-    </div>
-    {% endif %}
+    {% include 'components/error_messages.html' %}
 
     <form id="loginForm" method="POST" action="{{ url_for('user_login') }}">
       <div class="mb-3">

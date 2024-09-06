@@ -7,13 +7,7 @@
   <div class="col-md-6">
     <h2 class="text-center">Cadastro</h2>
 
-    {% if error_messages %}
-    <div class="alert alert-danger my-3" role="alert">
-      {% for error in error_messages %}
-      <p class="mb-0">{{ error }}</p>
-      {% endfor %}
-    </div>
-    {% endif %}
+    {% include 'components/error_messages.html' %}
 
     <form id="registerForm" method="POST" action="{{ url_for('user_register') }}">
       <div class="mb-3">
@@ -25,12 +19,12 @@
         <input type="password" class="form-control" id="password" name="password" required>
       </div>
       <div class="mb-3">
-        <label for="confirmPassword" class="form-label">Confirmar senha</label>
-        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+        <label for="confirm-password" class="form-label">Confirmar senha</label>
+        <input type="password" class="form-control" id="confirm-password" name="confirm-password" required>
       </div>
       <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="isSuper">
-        <label class="form-check-label" for="isSuper">Posts ilimitados</label>
+        <input type="checkbox" class="form-check-input" id="is-super" name="is-super">
+        <label class="form-check-label" for="is-super">Produtos ilimitados</label>
       </div>
       <div class="d-grid">
         <button type="submit" class="btn btn-primary">Realizar cadastro</button>

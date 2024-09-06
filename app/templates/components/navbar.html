@@ -1,13 +1,19 @@
-<nav class="navbar bg-dark border-bottom border-body navbar-expand-lg sticky-top" data-bs-theme="dark">
+<nav class="navbar bg-dark navbar-expand-lg sticky-top">
   <div class="container-fluid">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="/">Inicio</a>
-        <a class="nav-link" href="/user/login">Entrar</a>
-        <a class="nav-link" href="/user/register">Cadastrar</a>
+      <div class="navbar-nav me-auto">
+        <a class="nav-link mx-2" aria-current="page" href="/">Inicio</a>
+        <a class="nav-link mx-2" href="/user/login">Entrar</a>
+        <a class="nav-link mx-2" href="/user/register">Cadastrar</a>
+      </div>
+      <div class="navbar-nav ms-auto">
+        {% if session['user'] and session['authenticated'] %}
+        <span class="navbar-text mx-2 text-white">Autenticado como <strong>{{ session['user'] }}</strong></span>
+        <a class="nav-link me mx-2" href="/user/logout">Sair</a>
+        {% endif %}
       </div>
     </div>
   </div>

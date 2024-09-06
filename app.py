@@ -1,10 +1,10 @@
 from pathlib import Path
 
 from dotenv import load_dotenv
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, session
 
 from app import create_app
-from app.util.validation import validate_register
+from app.util.validation import validate_user, validade_product
 
 env_path: Path = Path(__file__).parent / '.env'
 
@@ -38,7 +38,9 @@ def user_login():
         if error_messages:
             return render_template('user/login.html', error_messages=error_messages)
 
-        return redirect('/')
+        session['user'] = username
+        session['authenticated'] = True
+        return redirect('/product/list')
 
 
 @app.route('/user/register', methods=['GET', 'POST'])
@@ -49,15 +51,34 @@ def user_register():
     elif request.method == 'POST':
         username: str = request.form.get('username')
         password: str = request.form.get('password')
-        confirm_password: str = request.form.get('confirmPassword')
+        confirm_password: str = request.form.get('confirm-password')
 
-        error_messages: list[str] = validate_register(username, password, confirm_password)
+        error_messages: list[str] = validate_user(username, password, confirm_password)
 
         if error_messages:
             return render_template('user/register.html', error_messages=error_messages)
 
-        return redirect('/')
+        return redirect('/user/login')
 
+
+@app.route('/product/register', methods=['POST'])
+def product_register():
+    if request.method == 'POST':
+        product_name: str = request.form.get('product-name')
+        quantity: str = request.form.get('quantity')
+        price: str = request.form.get('price')
+
+        error_messages: list[str] = validade_product(product_name, quantity, price)
+
+        if error_messages:
+            return render_template('user/login.html', error_messages=error_messages)
+
+        return redirect('/product/list')
+
+@app.route('/user/logout', methods=['GET'])
+def user_logout():
+    session.clear()
+    return redirect('/')
 
 if __name__ == '__main__':
     app.run()
