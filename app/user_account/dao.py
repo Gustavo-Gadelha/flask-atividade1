@@ -1,47 +1,53 @@
-class UserAccountDAO:
-    def __init__(self, db_manager):
-        self.db_manager = db_manager
+import bcrypt
 
-    def create_user(self, username, password, user_type):
-        sql = """
-        INSERT INTO user_account (username, password, type)
-        VALUES (%s, %s, %s)
-        RETURNING id;
-        """
+from app.database import get_connection
 
-        return self.db_manager.execute(sql, (username, password, user_type))
 
-    def get_all_users(self, user_id):
-        sql = 'SELECT * FROM user_account'
-        return self.db_manager.execute(sql, fetch=True)
+def create_user(username, password, user_type):
+    sql = 'INSERT INTO user_account (username, password, type) VALUES (%s, %s, %s) RETURNING *;'
 
-    def get_user_by_id(self, user_id):
-        sql = 'SELECT * FROM user_account WHERE id = %s'
-        return self.db_manager.execute(sql, (user_id,), fetch=True, one=True)
+    hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode()
 
-    def get_user_by_username(self, username):
-        sql = 'SELECT * FROM user_account WHERE username = %s'
-        return self.db_manager.execute(sql, (username,), fetch=True, one=True)
+    with get_connection() as conn, conn.cursor() as cur:
+        cur.execute(sql, (username, hashed, user_type))
+        return cur.fetchone()
 
-    def update_user(self, user_id, username=None, password=None, user_type=None):
-        updates = []
-        params = []
 
-        if username is not None:
-            updates.append('username = %s')
-            params.append(username)
-        if password is not None:
-            updates.append('password = %s')
-            params.append(password)
-        if user_type is not None:
-            updates.append('type = %s')
-            params.append(user_type)
+def get_all_users():
+    sql = 'SELECT * FROM user_account'
 
-        sql = f'UPDATE user_account SET {', '.join(updates)}  WHERE id = %s'
-        params.append(user_id)
+    with get_connection() as conn, conn.cursor() as cur:
+        cur.execute(sql)
+        return cur.fetchall()
 
-        return self.db_manager.execute(sql, params)
 
-    def delete_user(self, user_id):
-        sql = 'DELETE FROM user_account WHERE id = %s'
-        return self.db_manager.execute(sql, (user_id,))
+def get_user_by_id(user_id):
+    sql = 'SELECT * FROM user_account WHERE id = %s'
+
+    with get_connection() as conn, conn.cursor() as cur:
+        cur.execute(sql, (user_id,))
+        return cur.fetchone()
+
+
+def get_user_by_username(username):
+    sql = 'SELECT * FROM user_account WHERE username = %s'
+
+    with get_connection() as conn, conn.cursor() as cur:
+        cur.execute(sql, (username,))
+        return cur.fetchone()
+
+
+def update_user(user_id, username, password, user_type):
+    sql = f'UPDATE user_account SET username = %s, password = %s, type = %s WHERE id = %s'
+
+    hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode()
+
+    with get_connection() as conn, conn.cursor() as cur:
+        cur.execute(sql, (sql, username, hashed, user_type, user_id))
+
+
+def delete_user(user_id):
+    sql = 'DELETE FROM user_account WHERE id = %s'
+
+    with get_connection() as conn, conn.cursor() as cur:
+        cur.execute(sql, (user_id,))

@@ -1,0 +1,10 @@
+{% if success_messages %}
+<div class="alert alert-success alert-dismissible fade show my-3" role="alert">
+  <h4 class="alert-heading">Sucesso</h4>
+  <hr>
+  {% for message in success_messages %}
+  <p class="ml-1 mb-1">{{ message }}</p>
+  {% endfor %}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}

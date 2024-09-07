@@ -23,10 +23,6 @@ class Config(object):
     DB_HOST: str = os.environ.get('DB_HOST', 'localhost')
     DB_PORT: str = os.environ.get('DB_PORT', '5432')
 
-    @staticmethod
-    def init_app(app):
-        pass
-
 
 class DevelopmentConfig(Config):
     DEBUG: bool = True
@@ -34,9 +30,3 @@ class DevelopmentConfig(Config):
 
 class ProductionConfig(Config):
     DEBUG: bool = False
-
-
-config_manager = {
-    'development': DevelopmentConfig,
-    'production': ProductionConfig,
-}

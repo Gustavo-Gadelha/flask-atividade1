@@ -1,13 +1,13 @@
 CREATE TABLE IF NOT EXISTS user_account (
     id SERIAL PRIMARY KEY,
-    username VARCHAR(255) UNIQUE,
-    password VARCHAR(255) NOT NULL,
+    username TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL,
     type VARCHAR(10) CHECK (type IN ('super', 'normal')) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS product (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    name TEXT NOT NULL,
     user_id INT REFERENCES user_account(id) ON DELETE CASCADE,
     quantity INT CHECK (quantity >= 0) DEFAULT 0,
     price DECIMAL(10, 2) CHECK (price >= 0) DEFAULT 0

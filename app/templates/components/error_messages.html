@@ -1,9 +1,10 @@
 {% if error_messages %}
-<div class="alert alert-warning my-3" role="alert">
+<div class="alert alert-warning alert-dismissible fade show my-3" role="alert">
   <h4 class="alert-heading">Aviso</h4>
   <hr>
-  {% for error in error_messages %}
-  <p class="ml-1 mb-1">{{ error }}</p>
+  {% for message in error_messages %}
+  <p class="ml-1 mb-1">{{ message }}</p>
   {% endfor %}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 {% endif %}
