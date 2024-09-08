@@ -6,11 +6,11 @@ CREATE TABLE IF NOT EXISTS user_account (
 );
 
 CREATE TABLE IF NOT EXISTS product (
-    id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY NOT NULL,
     name TEXT NOT NULL,
-    user_id INT REFERENCES user_account(id) ON DELETE CASCADE,
-    quantity INT CHECK (quantity >= 0) DEFAULT 0,
-    price DECIMAL(10, 2) CHECK (price >= 0) DEFAULT 0
+    user_id INT NOT NULL REFERENCES user_account(id) ON DELETE CASCADE,
+    quantity INT NOT NULL CHECK (quantity >= 0) DEFAULT 0,
+    price DECIMAL(10, 2) NOT NULL CHECK (price >= 0) DEFAULT 0
 );
 
 CREATE OR REPLACE FUNCTION check_product_limit() RETURNS TRIGGER

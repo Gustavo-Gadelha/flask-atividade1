@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, session
+from flask import render_template, request, redirect, session, flash
 
 from app import create_app
 from app import user_account
@@ -10,7 +10,6 @@ app = create_app(DevelopmentConfig)
 
 @app.route('/')
 def index():
-    user_account.verify_login('gu', 123)
     return redirect('/product/list')
 
 
@@ -23,15 +22,13 @@ def user_login():
         username: str = request.form.get('username')
         password: str = request.form.get('password')
 
-        error_messages: list[str] = list()
-
         if user_account.verify_login(username, password):
-            session['user'] = username
-            session['authenticated'] = True
+            session['user']: str = username
+            session['authenticated']: bool = True
             return redirect('/product/list')
 
         else:
-            error_messages.append('Usuário ou senha não encontrados')
+            error_messages: list[str] = ['Usuário ou senha não encontrados']
             return render_template('user/login.html', error_messages=error_messages)
 
 
@@ -51,7 +48,7 @@ def user_register():
         if error_messages:
             return render_template('user/register.html', error_messages=error_messages)
 
-        if not error_messages:
+        else:
             user_account.create_user(username, password, user_type)
             success_messages = ['Usuário criado com sucesso']
             return render_template('user/login.html', success_messages=success_messages)
@@ -63,25 +60,26 @@ def user_logout():
     return redirect('/')
 
 
-@app.route('/product/list')
+@app.route('/product/list', methods=['POST', 'GET'])
 def product_list():
-    return render_template('product/list.html')
+    if request.method == 'GET':
+        return render_template('product/list.html')
 
-
-@app.route('/product/register', methods=['POST'])
-def product_register():
-    if request.method == 'POST':
+    elif request.method == 'POST':
         product_name: str = request.form.get('product-name')
         quantity: str = request.form.get('quantity')
         price: str = request.form.get('price')
 
         if 'user' not in session or 'authenticated' not in session:
-            print('user not authenticated')
             error_messages: list[str] = ['Você precisa estar autenticado para cadastrar um produto']
             return render_template('product/list.html', error_messages=error_messages)
 
         error_messages: list[str] = validade_product(product_name, quantity, price)
-        return render_template('product/list.html', error_messages=error_messages)
+
+        if error_messages:
+            return render_template('product/list.html', error_messages=error_messages)
+
+        return render_template('product/list.html')
 
 
 if __name__ == '__main__':

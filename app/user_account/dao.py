@@ -6,10 +6,10 @@ from app.database import get_connection
 def create_user(username, password, user_type):
     sql = 'INSERT INTO user_account (username, password, type) VALUES (%s, %s, %s) RETURNING *;'
 
-    hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode()
+    hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
     with get_connection() as conn, conn.cursor() as cur:
-        cur.execute(sql, (username, hashed, user_type))
+        cur.execute(sql, (username, hashed.decode('utf-8'), user_type))
         return cur.fetchone()
 
 
@@ -22,7 +22,7 @@ def get_all_users():
 
 
 def get_user_by_id(user_id):
-    sql = 'SELECT * FROM user_account WHERE id = %s'
+    sql = 'SELECT * FROM user_account WHERE id = %s;'
 
     with get_connection() as conn, conn.cursor() as cur:
         cur.execute(sql, (user_id,))
@@ -30,7 +30,7 @@ def get_user_by_id(user_id):
 
 
 def get_user_by_username(username):
-    sql = 'SELECT * FROM user_account WHERE username = %s'
+    sql = 'SELECT * FROM user_account WHERE username = %s;'
 
     with get_connection() as conn, conn.cursor() as cur:
         cur.execute(sql, (username,))
@@ -38,16 +38,17 @@ def get_user_by_username(username):
 
 
 def update_user(user_id, username, password, user_type):
-    sql = f'UPDATE user_account SET username = %s, password = %s, type = %s WHERE id = %s'
+    sql = f'UPDATE user_account SET username = %s, password = %s, type = %s WHERE id = %s RETURNING *;'
 
-    hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode()
+    hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
     with get_connection() as conn, conn.cursor() as cur:
-        cur.execute(sql, (sql, username, hashed, user_type, user_id))
+        cur.execute(sql, (username, hashed.decode('utf-8'), user_type, user_id))
+        return cur.fetchone()
 
 
 def delete_user(user_id):
-    sql = 'DELETE FROM user_account WHERE id = %s'
+    sql = 'DELETE FROM user_account WHERE id = %s;'
 
     with get_connection() as conn, conn.cursor() as cur:
         cur.execute(sql, (user_id,))

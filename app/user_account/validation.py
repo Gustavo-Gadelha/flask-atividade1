@@ -9,4 +9,4 @@ def verify_login(username, password):
     if user is None:
         return False
 
-    return username == user.username and bcrypt.checkpw(password.encode('utf8'), user.password.encode('utf8'))
+    return bcrypt.checkpw(password.encode('utf8'), user.password.encode('utf8'))
