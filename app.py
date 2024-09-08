@@ -48,6 +48,7 @@ def user_register():
         if not has_errors():
             user_account.create_user(username, password, user_type)
             flash('Usuário criado com sucesso', SUCCESS_MESSAGE)
+            return redirect(url_for('user_login'))
 
         return render_template('user/register.html')
 
@@ -56,7 +57,7 @@ def user_register():
 def user_logout():
     session.pop('user', None)
     session.pop('authenticated', None)
-    return redirect(url_for('login_user'))
+    return redirect(url_for('user_login'))
 
 
 @app.route('/product/list', methods=['POST', 'GET'])
