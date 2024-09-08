@@ -37,6 +37,11 @@ def get_user_by_username(username):
         return cur.fetchone()
 
 
+def get_user_by_login(username, password):
+    user = get_user_by_username(username)
+    return user is not None and bcrypt.checkpw(password.encode('utf8'), user.password.encode('utf8'))
+
+
 def update_user(user_id, username, password, user_type):
     sql = f'UPDATE user_account SET username = %s, password = %s, type = %s WHERE id = %s RETURNING *;'
 
