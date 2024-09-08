@@ -1,32 +1,36 @@
+from flask import flash, get_flashed_messages, session
+
 from app import user_account
 
+SUCCESS_MESSAGE: str = 'success'
+ERROR_MESSAGE: str = 'error'
 
-def validate_user(username: str, password: str, confirm_password: str) -> list[str]:
-    error_messages: list[str] = list()
 
+def validate_user(username: str, password: str, confirm_password: str):
     if username != username.strip() or password != password.strip():
-        error_messages.append('Não use espaços em branco no inicio ou no final do seu nome de usuário e/ou senha')
+        flash('Não use espaços em branco no inicio ou no final do seu nome de usuário e/ou senha', ERROR_MESSAGE)
     if len(username) < 5:
-        error_messages.append('O nome de usuário deve ter pelo menos 5 caracteres')
+        flash('O nome de usuário deve ter pelo menos 5 caracteres', ERROR_MESSAGE)
     if len(password) < 5:
-        error_messages.append('A senha deve ter pelo menos 5 caracteres')
+        flash('A senha deve ter pelo menos 5 caracteres', ERROR_MESSAGE)
     if password != confirm_password:
-        error_messages.append('As senhas não correspondem')
-
+        flash('As senhas não correspondem', ERROR_MESSAGE)
     if user_account.get_user_by_username(username):
-        error_messages.append('Já existe um usuário com esse nome')
-
-    return error_messages
+        flash('Já existe um usuário com esse nome', ERROR_MESSAGE)
 
 
-def validade_product(product_name: str, quantity: str, price: str) -> list[str]:
-    error_messages: list[str] = list()
-
+def validade_product(product_name: str, quantity: str, price: str):
     if product_name != product_name.strip():
-        error_messages.append('Não use espaços em branco no inicio ou no final do nome do produto')
+        flash('Não use espaços em branco no inicio ou no final do nome do produto', ERROR_MESSAGE)
     if not quantity.isdecimal() or int(quantity) <= 0:
-        error_messages.append('A quantidade do produto deve ser um numero inteiro positivo não-nulo')
+        flash('A quantidade do produto deve ser um numero inteiro positivo não-nulo', ERROR_MESSAGE)
     if not price.replace('.', '', 1).isdecimal() or float(price) <= 0:
-        error_messages.append('O preço do produto deve ser um numero positivo não-nulo')
+        flash('O preço do produto deve ser um numero positivo não-nulo', ERROR_MESSAGE)
 
-    return error_messages
+
+def has_errors():
+    return get_flashed_messages(category_filter=['error'])
+
+
+def has_user_session():
+    return ('user' in session) and (session['user']) and ('authenticated' in session) and (session['authenticated'])
