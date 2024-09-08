@@ -1,4 +1,4 @@
-from flask import flash, get_flashed_messages, session
+from flask import flash, get_flashed_messages
 
 from app import user_account
 
@@ -15,7 +15,7 @@ def validate_user(username: str, password: str, confirm_password: str):
         flash('A senha deve ter pelo menos 5 caracteres', ERROR_MESSAGE)
     if password != confirm_password:
         flash('As senhas não correspondem', ERROR_MESSAGE)
-    if user_account.get_user_by_username(username):
+    if user_account.get_by_username(username):
         flash('Já existe um usuário com esse nome', ERROR_MESSAGE)
 
 
@@ -30,7 +30,3 @@ def validade_product(product_name: str, quantity: str, price: str):
 
 def has_errors():
     return get_flashed_messages(category_filter=['error'])
-
-
-def has_user_session():
-    return ('user' in session) and (session['user']) and ('authenticated' in session) and (session['authenticated'])

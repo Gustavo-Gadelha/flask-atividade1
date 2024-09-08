@@ -10,8 +10,8 @@
         <a class="nav-link mx-2" href="/user/register">Cadastrar</a>
       </div>
       <div class="navbar-nav ms-auto">
-        {% if session['user'] and session['authenticated'] %}
-        <span class="navbar-text mx-2 text-white">Autenticado como <strong>{{ session['user'] }}</strong></span>
+        {% if session.get('user_name') and session.get('authenticated') %}
+        <span class="navbar-text mx-2 text-white">Autenticado como <strong>{{ session.get('user_name') }}</strong></span>
         <a class="nav-link me mx-2" href="/user/logout">Sair</a>
         {% endif %}
       </div>

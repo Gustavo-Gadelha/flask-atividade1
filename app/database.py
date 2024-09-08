@@ -21,7 +21,7 @@ def init_db():
 
 
 def get_connection():
-    if has_open_connetion():
+    if has_open_connection():
         return g.db
 
     try:
@@ -41,18 +41,18 @@ def get_connection():
 
 
 def close_connection():
-    if has_open_connetion():
+    if has_open_connection():
         g.db.close()
 
     g.pop('db', None)
 
 
-def has_open_connetion():
+def has_open_connection():
     return ('db' in g) and (g.db is not None) and (not g.db.closed)
 
 
 def teardown_connection(exception):
     try:
         close_connection()
-    except psycopg2.Error as e:
-        raise exception
+    except psycopg2.Error as connection_error:
+        raise Exception(exception, connection_error)

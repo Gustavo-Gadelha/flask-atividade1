@@ -1,9 +1,9 @@
-from flask import render_template, request, redirect, session, flash, url_for
+from flask import render_template, request, redirect, flash, url_for
 
 from app import create_app
 from app import user_account
 from config import DevelopmentConfig
-from util import ERROR_MESSAGE, SUCCESS_MESSAGE, has_errors, has_user_session, validade_product, validate_user
+from util import ERROR_MESSAGE, SUCCESS_MESSAGE, has_errors, validade_product, validate_user
 
 app = create_app(DevelopmentConfig)
 
@@ -22,9 +22,8 @@ def user_login():
         username: str = request.form.get('username')
         password: str = request.form.get('password')
 
-        if user_account.get_user_by_login(username, password):
-            session['user']: str = username
-            session['authenticated']: bool = True
+        if user := user_account.get_by_login(username, password):
+            user_account.create_session(user)
             return redirect(url_for('product_list'))
 
         else:
@@ -46,7 +45,7 @@ def user_register():
         validate_user(username, password, confirm_password)
 
         if not has_errors():
-            user_account.create_user(username, password, user_type)
+            user_account.create(username, password, user_type)
             flash('Usuário criado com sucesso', SUCCESS_MESSAGE)
             return redirect(url_for('user_login'))
 
@@ -55,8 +54,7 @@ def user_register():
 
 @app.route('/user/logout', methods=['GET'])
 def user_logout():
-    session.pop('user', None)
-    session.pop('authenticated', None)
+    user_account.teardown_session()
     return redirect(url_for('user_login'))
 
 
@@ -65,7 +63,8 @@ def product_list():
     if request.method == 'GET':
         return render_template('product/list.html')
     elif request.method == 'POST':
-        if not has_user_session():
+
+        if not user_account.has_session():
             flash('Você precisa estar autenticado para cadastrar um produto', ERROR_MESSAGE)
             return render_template('product/list.html')
 

@@ -1,3 +1,6 @@
+--DROP TABLE IF EXISTS user_account CASCADE;
+--DROP TABLE IF EXISTS product CASCADE;
+
 CREATE TABLE IF NOT EXISTS user_account (
     id SERIAL PRIMARY KEY,
     username TEXT UNIQUE NOT NULL,
@@ -8,9 +11,9 @@ CREATE TABLE IF NOT EXISTS user_account (
 CREATE TABLE IF NOT EXISTS product (
     id SERIAL PRIMARY KEY NOT NULL,
     name TEXT NOT NULL,
-    user_id INT NOT NULL REFERENCES user_account(id) ON DELETE CASCADE,
     quantity INT NOT NULL CHECK (quantity >= 0) DEFAULT 0,
-    price DECIMAL(10, 2) NOT NULL CHECK (price >= 0) DEFAULT 0
+    price DECIMAL(10, 2) NOT NULL CHECK (price >= 0) DEFAULT 0,
+    user_id INT NOT NULL REFERENCES user_account(id) ON DELETE CASCADE
 );
 
 CREATE OR REPLACE FUNCTION check_product_limit() RETURNS TRIGGER
