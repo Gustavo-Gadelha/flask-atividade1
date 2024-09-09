@@ -15,3 +15,15 @@ def teardown_session():
 
 def has_session():
     return session.get('user_id') is not None and session.get('user_name') and session.get('authenticated')
+
+
+def session_id():
+    return session.get('user_id')
+
+
+def session_name():
+    return session.get('user_name')
+
+
+def session_authenticated():
+    return session.get('authenticated')

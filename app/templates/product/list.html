@@ -17,6 +17,7 @@
 
 {% include 'product/register.html' %}
 
+{% if products %}
 <table class="table table-striped">
   <thead>
   <tr>
@@ -27,24 +28,15 @@
   </tr>
   </thead>
   <tbody>
+  {% for product in products %}
   <tr>
-    <td>1</td>
-    <td>Produto A</td>
-    <td>10</td>
-    <td>R$100.00</td>
+    <td>{{ product.id }}</td>
+    <td>{{ product.name }}</td>
+    <td>{{ product.quantity }}</td>
+    <td>R${{ product.price }}</td>
   </tr>
-  <tr>
-    <td>2</td>
-    <td>Produto B</td>
-    <td>5</td>
-    <td>R$50.00</td>
-  </tr>
-  <tr>
-    <td>3</td>
-    <td>Produto C</td>
-    <td>20</td>
-    <td>R$200.00</td>
-  </tr>
+  {% endfor %}
   </tbody>
 </table>
+{% endif %}
 {% endblock %}

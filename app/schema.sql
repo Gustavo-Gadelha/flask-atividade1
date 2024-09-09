@@ -20,7 +20,7 @@ CREATE OR REPLACE FUNCTION check_product_limit() RETURNS TRIGGER
 AS $$
 BEGIN
     IF (SELECT COUNT(*) FROM product WHERE user_id = NEW.user_id) >= 3 AND
-       (SELECT type FROM user_account WHERE user_id = NEW.user_id) = 'normal' THEN
+       (SELECT type FROM user_account WHERE id = NEW.user_id) = 'normal' THEN
         RAISE EXCEPTION 'Usuários normais podem cadastrar no máximo 3 produtos.';
     END IF;
     RETURN NEW;
