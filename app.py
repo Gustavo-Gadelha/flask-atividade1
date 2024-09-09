@@ -59,7 +59,7 @@ def user_logout():
     return redirect(url_for('user_login'))
 
 
-@app.route('/product/list', methods=['GET'])
+@app.route('/product/list', methods=['GET', 'POST'])
 def product_list():
     if request.method == 'GET':
         return render_template('product/list.html', products=product.get_all())
