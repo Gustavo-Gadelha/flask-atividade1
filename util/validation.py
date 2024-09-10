@@ -1,6 +1,6 @@
 from flask import flash, get_flashed_messages
 
-from app import user_account
+from app import user_account, product
 
 SUCCESS_MESSAGE: str = 'success'
 ERROR_MESSAGE: str = 'error'
@@ -19,13 +19,15 @@ def validate_user(username: str, password: str, confirm_password: str):
         flash('Já existe um usuário com esse nome', ERROR_MESSAGE)
 
 
-def validade_product(product_name: str, quantity: str, price: str):
+def validade_product(product_name: str, quantity: str, price: str, user_id: int):
     if product_name != product_name.strip():
         flash('Não use espaços em branco no inicio ou no final do nome do produto', ERROR_MESSAGE)
     if not quantity.isdecimal() or int(quantity) <= 0:
         flash('A quantidade do produto deve ser um numero inteiro positivo não-nulo', ERROR_MESSAGE)
     if not price.replace('.', '', 1).isdecimal() or float(price) <= 0:
         flash('O preço do produto deve ser um numero positivo não-nulo', ERROR_MESSAGE)
+    if user_account.get_by_id(user_id).type == 'normal' and len(product.get_by_user_id(user_id)) >= 3:
+        flash('Usuário normais não podem cadastrar mais de 3 produtos', ERROR_MESSAGE)
 
 
 def has_errors():

@@ -25,11 +25,11 @@ def get_by_id(product_id):
         return cur.fetchone()
 
 
-def get_by_user_name(user_name):
-    sql = 'SELECT p.* FROM product p JOIN user_account u ON p.user_id = u.id WHERE u.username = %s;'
+def get_by_user_id(user_id):
+    sql = 'SELECT p.* FROM product p JOIN user_account u ON p.user_id = u.id WHERE u.id = %s;'
 
     with get_connection() as conn, conn.cursor() as cur:
-        cur.execute(sql, user_name)
+        cur.execute(sql, (user_id,))
         return cur.fetchall()
 
 

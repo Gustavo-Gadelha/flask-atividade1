@@ -72,14 +72,13 @@ def product_list():
         quantity: str = request.form.get('quantity')
         price: str = request.form.get('price')
 
-        validade_product(product_name, quantity, price)
+        validade_product(product_name, quantity, price, user_account.session_id())
 
         if not has_errors():
             product.create(product_name, quantity, price, user_account.session_id())
             flash('Produto registrado com sucesso', SUCCESS_MESSAGE)
 
         return render_template('product/list.html', products=product.get_all())
-
 
 
 if __name__ == '__main__':
