@@ -1,4 +1,4 @@
-from flask import flash, get_flashed_messages
+from flask import flash, session
 
 from app import user_account, product
 
@@ -31,4 +31,9 @@ def validade_product(product_name: str, quantity: str, price: str, user_id: int)
 
 
 def has_errors():
-    return get_flashed_messages(category_filter=['error'])
+    if messages := session.get('_flashes') is not None:
+        error_messages = [(category, message) for category, message in messages if category == ERROR_MESSAGE]
+        return error_messages is not None
+
+    else:
+        return False
