@@ -14,7 +14,7 @@ def create(username, password, user_type):
 
 
 def get_all():
-    sql = 'SELECT * FROM user_account'
+    sql = 'SELECT * FROM user_account;'
 
     with get_connection() as conn, conn.cursor() as cur:
         cur.execute(sql)

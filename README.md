@@ -7,7 +7,9 @@ Desenvolver um sistema web para gerenciar usuários e produtos utilizando Flask.
 ## Tecnologias Utilizadas
 
 - HTML, CSS, JavaScript
+- Bootstrap 5 (Framework de Estilo)
 - Flask (Framework Web)
+- Jinja2 (Template Engine para Flask)
 - PostgreSQL (Banco de Dados)
 
 ## Módulos do Sistema
@@ -23,18 +25,19 @@ Desenvolver um sistema web para gerenciar usuários e produtos utilizando Flask.
     - O usuário **normal** pode cadastrar até 3 produtos.
 
 
-- **Tabela Usuário**
-    - `loginUser`: String
-    - `senha`: String
-    - `tipoUser`: String (`super` ou `normal`)
-
-
-- **Tabela Produtos**
+- **Tabela user_account**
     - `id`: Inteiro
-    - `nome`: String
-    - `loginUser`: String (Referência ao usuário que cadastrou o produto)
-    - `qtde`: Inteiro (Quantidade)
-    - `preço`: Decimal (Preço do produto)
+    - `login`: String
+    - `password`: String
+    - `type`: String (`super` ou `normal`)
+
+
+- **Tabela product**
+    - `id`: Inteiro
+    - `name`: String
+    - `quantity`: Inteiro (Deve ser igual ou maior que 0)
+    - `price`: Decimal (Deve ser igual ou maior que 0)
+    - `user_id`: String (Referência ao usuário que cadastrou o produto)
 
 ## Considerações
 
