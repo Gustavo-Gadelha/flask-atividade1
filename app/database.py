@@ -3,20 +3,13 @@ from flask import g, current_app
 from psycopg2.extras import NamedTupleCursor
 
 
-def init_app(app):
-    app.teardown_appcontext(teardown_connection)
-
-    with app.app_context():
-        init_db()
-
-
 def init_db():
-    connection = get_connection()
+    current_app.teardown_appcontext(teardown_connection)
 
     with current_app.open_resource('schema.sql') as schema:
         sql = schema.read().decode('utf8')
 
-    with connection, connection.cursor() as cur:
+    with get_connection() as conn, conn.cursor() as cur:
         cur.execute(sql)
 
 
@@ -48,7 +41,7 @@ def close_connection():
 
 
 def has_open_connection():
-    return ('db' in g) and (g.db is not None) and (not g.db.closed)
+    return g.get('db') is not None and (not g.db.closed)
 
 
 def teardown_connection(exception):

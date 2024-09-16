@@ -6,6 +6,7 @@ def create_app(config):
     app.config.from_object(config)
 
     from . import database
-    database.init_app(app)
+    with app.app_context():
+        database.init_db()
 
     return app
