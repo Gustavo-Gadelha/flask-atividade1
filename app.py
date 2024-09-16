@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, flash, url_for
+from flask import render_template, request, redirect, flash
 
 from app import create_app, validation
 from app import product
@@ -10,7 +10,7 @@ app = create_app(DevelopmentConfig)
 
 @app.route('/')
 def index():
-    return redirect(url_for('product_list'))
+    return redirect('/product/list')
 
 
 @app.route('/user/login', methods=['GET', 'POST'])
@@ -24,11 +24,19 @@ def user_login():
 
         if user := user_account.get_by_login(username, password):
             user_account.create_session(user)
-            return redirect(url_for('product_list'))
+            flash('Usuário autenticado com sucesso', validation.SUCCESS_MESSAGE)
 
         else:
             flash('Usuário ou senha não encontrados', validation.ERROR_MESSAGE)
-            return render_template('user/login.html')
+
+        return redirect('/user/login')
+
+
+@app.route('/user/logout', methods=['GET'])
+def user_logout():
+    if request.method == 'GET':
+        user_account.teardown_session()
+        return redirect('/user/login')
 
 
 @app.route('/user/register', methods=['GET', 'POST'])
@@ -40,32 +48,26 @@ def user_register():
         username: str = request.form.get('username')
         password: str = request.form.get('password')
         confirm_password: str = request.form.get('confirm-password')
-        user_type: str = 'super' if (request.form.get('is-super') == 'on') else 'normal'
+        user_type: str = 'super' if request.form.get('is-super') == 'on' else 'normal'
 
         validation.validate_user(username, password, confirm_password)
 
-        if validation.has_errors():
-            return render_template('user/register.html')
+        if not validation.has_errors():
+            user_account.create(username, password, user_type)
+            flash('Usuário criado com sucesso', validation.SUCCESS_MESSAGE)
 
-        user_account.create(username, password, user_type)
-        flash('Usuário criado com sucesso', validation.SUCCESS_MESSAGE)
-        return redirect(url_for('user_login'))
-
-
-@app.route('/user/logout', methods=['GET'])
-def user_logout():
-    user_account.teardown_session()
-    return redirect(url_for('user_login'))
+        return redirect('/user/register')
 
 
 @app.route('/product/list', methods=['GET', 'POST'])
 def product_list():
     if request.method == 'GET':
         return render_template('product/list.html', products=product.get_all())
+
     elif request.method == 'POST':
         if not user_account.has_session():
             flash('Você precisa estar autenticado para cadastrar um produto', validation.ERROR_MESSAGE)
-            return render_template('product/list.html', products=product.get_all())
+            return redirect('/product/list')
 
         product_name: str = request.form.get('product-name')
         quantity: str = request.form.get('quantity')
@@ -75,9 +77,8 @@ def product_list():
 
         if not validation.has_errors():
             product.create(product_name, quantity, price, user_account.session_id())
-            flash('Produto registrado com sucesso', validation.SUCCESS_MESSAGE)
 
-        return render_template('product/list.html', products=product.get_all())
+        return redirect('/product/list')
 
 
 if __name__ == '__main__':
