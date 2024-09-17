@@ -15,7 +15,9 @@
   {% endif %}
 </div>
 
+{% if session.get('user_name') and session.get('authenticated') %}
 {% include 'product/register.html' %}
+{% endif %}
 
 {% if products %}
 <table class="table table-striped">

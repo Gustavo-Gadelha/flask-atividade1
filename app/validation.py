@@ -32,8 +32,7 @@ def validade_product(product_name: str, quantity: str, price: str, user_id: int)
 
 def has_errors():
     if messages := session.get('_flashes') is not None:
-        error_messages = [(category, message) for category, message in messages if category == ERROR_MESSAGE]
+        error_messages = [message for category, message in messages if category == ERROR_MESSAGE]
         return error_messages is not None
 
-    else:
-        return False
+    return False
