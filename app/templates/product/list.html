@@ -7,13 +7,11 @@
 {% endblock %}
 
 {% block body %}
+{% if products %}
 <h1 class="text-center mb-4">Lista de produtos</h1>
-
-<div class="text-end mb-4">
-  {% if user %}
-  <p><strong>Usuário atual:</strong> <span id="user">{{ user }}</span></p>
-  {% endif %}
-</div>
+{% else %}
+<h1 class="text-center mb-4">Início</h1>
+{% endif %}
 
 {% if session.get('user_name') and session.get('authenticated') %}
 {% include 'product/register.html' %}
