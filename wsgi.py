@@ -3,9 +3,8 @@ from flask import render_template, request, redirect, flash
 from app import create_app, validation
 from app import product
 from app import user_account
-from config import ProductionConfig
 
-app = create_app(ProductionConfig)
+app = create_app()
 
 
 @app.route('/')

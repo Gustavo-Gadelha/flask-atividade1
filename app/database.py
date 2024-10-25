@@ -19,11 +19,11 @@ def get_connection():
 
     try:
         g.db = psycopg2.connect(
-            dbname=current_app.config['DB_NAME'],
-            user=current_app.config['DB_USER'],
-            password=current_app.config['DB_PASSWORD'],
-            host=current_app.config['DB_HOST'],
-            port=current_app.config['DB_PORT'],
+            dbname=current_app.config['DATABASE_NAME'],
+            user=current_app.config['DATABASE_USER'],
+            password=current_app.config['DATABASE_PASSWORD'],
+            host=current_app.config['DATABASE_HOST'],
+            port=current_app.config['DATABASE_PORT'],
             cursor_factory=NamedTupleCursor
         )
 
