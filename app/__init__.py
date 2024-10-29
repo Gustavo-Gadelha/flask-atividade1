@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import Flask, url_for, redirect
 
 from app.config import DevelopmentConfig, ProductionConfig
 
@@ -16,5 +16,13 @@ def create_app():
     from . import database
     with app.app_context():
         database.init_db()
+
+    from .routes import user_bp, product_bp
+    app.register_blueprint(user_bp, url_prefix='/user')
+    app.register_blueprint(product_bp, url_prefix='/product')
+
+    @app.route('/')
+    def index():
+        return redirect(url_for('product.list_all'))
 
     return app

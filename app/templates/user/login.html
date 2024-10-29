@@ -10,7 +10,7 @@
     {% include 'components/success_messages.html' %}
     {% include 'components/error_messages.html' %}
 
-    <form id="loginForm" method="POST" action="{{ url_for('user_login') }}">
+    <form id="loginForm" method="POST" action="{{ url_for('user.login') }}">
       <div class="mb-3">
         <label for="username" class="form-label">Usuário</label>
         <input type="text" class="form-control" id="username" name="username" required>
@@ -23,7 +23,7 @@
         <button type="submit" class="btn btn-primary">Entrar</button>
       </div>
       <div class="text-center">
-        <a href="{{ url_for('user_register') }}" class="btn btn-link text-decoration-none">Criar conta</a>
+        <a href="{{ url_for('user.register') }}" class="btn btn-link text-decoration-none">Criar conta</a>
       </div>
     </form>
   </div>
