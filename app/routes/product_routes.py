@@ -24,4 +24,4 @@ def list_all():
         if not validation.has_errors():
             product.create(product_name, quantity, price, user_account.session_id())
 
-        return redirect(url_for('list'))
+        return redirect(url_for('.list_all'))
