@@ -10,7 +10,7 @@ def create(name, quantity, price, user_id):
 
 
 def get_all():
-    sql = 'SELECT * FROM product'
+    sql = 'SELECT * FROM product;'
 
     with get_connection() as conn, conn.cursor() as cur:
         cur.execute(sql)
@@ -22,6 +22,13 @@ def get_by_id(product_id):
 
     with get_connection() as conn, conn.cursor() as cur:
         cur.execute(sql, (product_id,))
+        return cur.fetchone()
+
+def get_by_name(product_name):
+    sql = 'SELECT * FROM product WHERE name = %s;'
+
+    with get_connection() as conn, conn.cursor() as cur:
+        cur.execute(sql, (product_name,))
         return cur.fetchone()
 
 
