@@ -40,4 +40,7 @@ def create_app():
     def index():
         return redirect(url_for('product.list_all'))
 
+    from app.auth import login_manager
+    login_manager.init_app(app)
+
     return app

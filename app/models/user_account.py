@@ -1,6 +1,7 @@
 import enum
 from datetime import datetime
 
+from flask_login import UserMixin
 from sqlalchemy import Enum
 
 from app import db, bcrypt
@@ -11,7 +12,7 @@ class AccountType(enum.Enum):
     SUPER = 'super'
 
 
-class UserAccount(db.Model):
+class UserAccount(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)

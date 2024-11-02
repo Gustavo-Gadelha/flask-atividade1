@@ -1,6 +1,7 @@
-from flask import Blueprint, redirect, request, render_template, flash, url_for
+from flask import Blueprint, redirect, request, render_template, url_for
+from flask_login import login_required, current_user
 
-from app import validation, session, db
+from app import validation, db
 from app.models import Product
 
 product_bp = Blueprint('product', __name__)
@@ -12,19 +13,16 @@ def list_all():
 
 
 @product_bp.route('/register', methods=['POST'])
+@login_required
 def register():
-    if not session.has_user_session():
-        flash('Você precisa estar autenticado para cadastrar um produto', validation.ERROR_MESSAGE)
-        return redirect(url_for('list'))
-
     name: str = request.form.get('product-name')
     quantity: str = request.form.get('quantity')
     price: str = request.form.get('price')
 
-    validation.validade_product(name, quantity, price, session.get_user_id())
+    validation.validade_product(name, quantity, price, current_user.id)
 
     if not validation.has_errors():
-        product = Product(name, quantity, price, session.get_user_id())
+        product = Product(name, quantity, price, current_user.id)
         db.session.add(product)
         db.session.commit()
 
