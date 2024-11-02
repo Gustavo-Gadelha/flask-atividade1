@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 
-from app import user_account, validation
+from app import validation, session, db
+from app.models import UserAccount
+from app.models.user_account import AccountType
 
 user_bp = Blueprint('user', __name__)
 
@@ -14,8 +16,9 @@ def login():
         username: str | None = request.form.get('username')
         password: str | None = request.form.get('password')
 
-        if user := user_account.get_by_login(username, password):
-            user_account.create_session(user)
+        user = UserAccount.query.filter_by(username=username).first()
+        if user is not None and user.check_password(password):
+            session.create(user)
             flash('Usuário autenticado com sucesso', validation.SUCCESS_MESSAGE)
         else:
             flash('Usuário ou senha não encontrados', validation.ERROR_MESSAGE)
@@ -26,7 +29,7 @@ def login():
 @user_bp.route('/logout', methods=['GET'])
 def logout():
     if request.method == 'GET':
-        user_account.teardown_session()
+        session.teardown()
         return redirect(url_for('.login'))
 
 
@@ -39,12 +42,16 @@ def register():
         username: str | None = request.form.get('username')
         password: str | None = request.form.get('password')
         confirm_password: str | None = request.form.get('confirm-password')
-        user_type: str = 'super' if request.form.get('is-super') == 'on' else 'normal'
+        user_type: AccountType = AccountType.SUPER if request.form.get('is-super') == 'on' else AccountType.NORMAL
 
         validation.validate_user(username, password, confirm_password)
 
         if not validation.has_errors():
-            user_account.create(username, password, user_type)
-            flash('Usuário criado com sucesso', validation.SUCCESS_MESSAGE)
+            user_account = UserAccount(username, password, user_type)
+            db.session.add(user_account)
+            db.session.commit()
 
-        return redirect(url_for('.login'))
+            flash('Usuário criado com sucesso', validation.SUCCESS_MESSAGE)
+            return redirect(url_for('.login'))
+
+        return redirect(url_for('.register'))

@@ -1,8 +1,6 @@
-from typing import List, Any
-
 from flask import flash, session
 
-from app import user_account, product
+from app.models import UserAccount, Product
 
 SUCCESS_MESSAGE: str = 'success'
 ERROR_MESSAGE: str = 'error'
@@ -17,7 +15,7 @@ def validate_user(username: str, password: str, confirm_password: str):
         flash('A senha deve ter pelo menos 5 caracteres', ERROR_MESSAGE)
     if password != confirm_password:
         flash('As senhas não correspondem', ERROR_MESSAGE)
-    if user_account.get_by_username(username):
+    if UserAccount.query.filter_by(username=username).count() > 0:
         flash('Já existe um usuário com esse nome', ERROR_MESSAGE)
 
 
@@ -28,13 +26,13 @@ def validade_product(product_name: str, quantity: str, price: str, user_id: int)
         flash('A quantidade do produto deve ser um numero inteiro positivo não-nulo', ERROR_MESSAGE)
     if not price.replace('.', '', 1).isdecimal() or float(price) <= 0:
         flash('O preço do produto deve ser um numero positivo não-nulo', ERROR_MESSAGE)
-    if user_account.get_by_id(user_id).type == 'normal' and len(product.get_by_user_id(user_id)) >= 3:
+    if UserAccount.query.get(user_id).user_type == 'normal' and Product.query.filter_by(user_id=user_id).count() >= 3:
         flash('Usuário normais não podem cadastrar mais de 3 produtos', ERROR_MESSAGE)
 
 
 def has_errors():
     if (messages := session.get('_flashes')) is not None:
-        error_messages: list[str] = [message for category, message in messages if category == ERROR_MESSAGE]
-        return error_messages is not None and len(error_messages) == 0
+        error_messages = [message for category, message in messages if category == ERROR_MESSAGE]
+        return len(error_messages) > 0
 
     return False

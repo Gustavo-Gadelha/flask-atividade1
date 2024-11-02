@@ -1,8 +1,9 @@
-from itertools import product
-
 from flask import jsonify, request, Blueprint
 
-from app import user_account, product
+from app import db
+from app.models import Product, UserAccount
+from app.schemas.product import products_schema, product_schema
+from app.schemas.user_account import user_accounts_schema
 
 api_bp = Blueprint('api', __name__)
 
@@ -10,43 +11,46 @@ api_bp = Blueprint('api', __name__)
 @api_bp.route('/products/insert', methods=['POST'])
 def insert_product():
     data = request.json
-    name = data.get('name')
-    quantity = data.get('quantity')
-    price = data.get('price')
-    user_id = user_account.session_id()
 
-    if not name or not isinstance(name, str):
-        return jsonify({"error": "Product name is required and must be a string"}), 400
-    if quantity is None or not isinstance(quantity, int) or quantity < 0:
-        return jsonify({"error": "Quantity must be a non-negative integer"}), 400
-    if price is None or not isinstance(price, (float, int)) or price < 0:
-        return jsonify({"error": "Price must be a non-negative number"}), 400
+    product = product_schema.load(data)
 
-    if new_product := product.create(name, quantity, price, user_id):
-        return jsonify(new_product), 200
+    db.session.add(product)
+    db.session.commit()
+
+    return jsonify(product_schema.dump(product)), 200
 
 
-@api_bp.route('/products/name/<int:product_id>', methods=['GET'])
-def get_product_by_id(product_id: int):
-    if query_product := product.get_by_id(product_id):
-        return jsonify(query_product)
+@api_bp.route('/products/id/<int:product_id>', methods=['GET'])
+def get_product_by_id(product_id):
+    product = Product.query.get(product_id)
+    if product:
+        return jsonify(product_schema.dump(product)), 200
     else:
-        return jsonify({"error": "Product not found"}), 404
+        return jsonify({
+            "error": "Product not found",
+            "requested_product_id": product_id,
+        }), 404
 
 
-@api_bp.route('/products/id/<string:product_name>', methods=['GET'])
-def get_product_by_name(product_name: str):
-    if query_product := product.get_by_name(product_name):
-        return jsonify(query_product)
+@api_bp.route('/products/name/<string:product_name>', methods=['GET'])
+def get_product_by_name(product_name):
+    products = Product.query.filter_by(name=product_name).all()
+    if products:
+        return jsonify(products_schema.dump(products)), 200
     else:
-        return jsonify({"error": "Product not found"}), 404
+        return jsonify({
+            "error": "Product not found",
+            "requested_product": product_name
+        }), 404
 
 
 @api_bp.route('/products', methods=['GET'])
 def get_all_products():
-    return jsonify(product.get_all()), 200
+    products = Product.query.all()
+    return jsonify(products_schema.dump(products)), 200
 
 
 @api_bp.route('/users', methods=['GET'])
 def get_all_users():
-    return jsonify(user_account.get_all()), 200
+    user_accounts = UserAccount.query.all()
+    return jsonify(user_accounts_schema.dump(user_accounts)), 200
