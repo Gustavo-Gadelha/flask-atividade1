@@ -43,12 +43,12 @@ def register():
         username: str | None = request.form.get('username')
         password: str | None = request.form.get('password')
         confirm_password: str | None = request.form.get('confirm-password')
-        user_type: AccountType = AccountType.SUPER if request.form.get('is-super') == 'on' else AccountType.NORMAL
+        account_type: AccountType = AccountType.SUPER if request.form.get('is-super') == 'on' else AccountType.NORMAL
 
         validation.validate_user(username, password, confirm_password)
 
         if not validation.has_errors():
-            user_account = UserAccount(username, password, user_type)
+            user_account = UserAccount(username, password, account_type)
             db.session.add(user_account)
             db.session.commit()
 

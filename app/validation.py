@@ -26,7 +26,7 @@ def validade_product(product_name: str, quantity: str, price: str, user_id: int)
         flash('A quantidade do produto deve ser um numero inteiro positivo não-nulo', ERROR_MESSAGE)
     if not price.replace('.', '', 1).isdecimal() or float(price) <= 0:
         flash('O preço do produto deve ser um numero positivo não-nulo', ERROR_MESSAGE)
-    if UserAccount.query.get(user_id).user_type == 'normal' and Product.query.filter_by(user_id=user_id).count() >= 3:
+    if UserAccount.query.get(user_id).account_type == 'normal' and Product.query.filter_by(user_id=user_id).count() >= 3:
         flash('Usuário normais não podem cadastrar mais de 3 produtos', ERROR_MESSAGE)
 
 

@@ -6,6 +6,7 @@ from sqlalchemy import Enum
 
 from app import db, bcrypt
 
+NORMAL_ACCOUNT_MAX_PRODUCTS = 3
 
 class AccountType(enum.Enum):
     NORMAL = 'normal'
@@ -16,7 +17,7 @@ class UserAccount(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
-    user_type = db.Column(Enum(AccountType), nullable=False)
+    account_type = db.Column(Enum(AccountType), nullable=False)
     is_admin = db.Column(db.Boolean, default=False, nullable=False)
 
     created_at = db.Column(db.DateTime, default=datetime.now(), nullable=False)
@@ -24,10 +25,10 @@ class UserAccount(db.Model, UserMixin):
 
     products = db.relationship('Product', backref='user', lazy=True)
 
-    def __init__(self, username, password, user_type):
+    def __init__(self, username, password, account_type):
         self.username = username
         self.password = bcrypt.generate_password_hash(password)
-        self.user_type = user_type
+        self.account_type = account_type
 
     def set_password(self, password):
         self.password = bcrypt.generate_password_hash(password)

@@ -2,6 +2,7 @@ import os
 
 from flask import Flask, url_for, redirect
 from flask_bcrypt import Bcrypt
+from flask_jwt_extended import JWTManager
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 
@@ -10,6 +11,7 @@ from app.config import DevelopmentConfig, ProductionConfig
 db = SQLAlchemy()
 ma = Marshmallow()
 bcrypt = Bcrypt()
+jwt  = JWTManager()
 
 
 def create_app():
@@ -23,6 +25,7 @@ def create_app():
     db.init_app(app)
     ma.init_app(app)
     bcrypt.init_app(app)
+    jwt.init_app(app)
 
     # TODO: use flask-Migrate to make migrations instead of overwriting the database on update
     from .models import UserAccount, product

@@ -17,6 +17,10 @@ class _Config(object):
     REMEMBER_COOKIE_HTTPONLY: bool = os.environ.get('REMEMBER_COOKIE_HTTPONLY', 'True') == 'True'
     SESSION_COOKIE_SAMESITE: str = os.environ.get('SESSION_COOKIE_SAMESITE', 'Lax')
 
+    JWT_ISSUER: str = os.environ.get('JWT_ISSUER')
+    JWT_AUTHTYPE: str = os.environ.get('JWT_AUTHTYPE')
+    JWT_SECRET: str = os.environ.get('JWT_SECRET')
+
 
 class DevelopmentConfig(_Config):
     DEBUG: bool = True

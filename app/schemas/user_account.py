@@ -12,9 +12,8 @@ class UserAccountSchema(ma.SQLAlchemySchema):
 
     id = ma.auto_field()
     username = ma.auto_field(required=True)
-    user_type = Enum(AccountType, by_value=True, required=True)
+    account_type = Enum(AccountType, by_value=True, required=True)
 
-    is_admin = ma.auto_field(dump_only=True)
     created_at = ma.auto_field(dump_only=True)
     updated_at = ma.auto_field(dump_only=True)
 
