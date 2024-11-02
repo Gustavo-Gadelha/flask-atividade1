@@ -103,5 +103,5 @@ def get_all_products():
 @api_bp.route('/users', methods=['GET'])
 @jwt_required()
 def get_all_users():
-    user_accounts = UserAccount.query.all()
+    user_accounts = UserAccount.query.filter_by(is_admin=False).all()
     return jsonify(user_accounts_schema.dump(user_accounts)), 200
