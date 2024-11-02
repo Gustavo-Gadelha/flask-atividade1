@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}API Token{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h1 class="text-center mb-4">Autenticação</h1>
+      {% if access_token %}
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Token JWT:</h5>
+          <div class="bg-light p-3 rounded">
+            <code id="accessToken" class="text-break">{{ access_token }}</code>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="alert alert-warning mt-3" role="alert">
+        <strong>Warning:</strong> No access token available.
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

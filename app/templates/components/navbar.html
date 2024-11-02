@@ -5,14 +5,15 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <div class="navbar-nav me-auto">
-        <a class="nav-link mx-2" aria-current="page" href="/product/list">Lista de Produtos</a>
-        <a class="nav-link mx-2" href="/user/login">Entrar</a>
-        <a class="nav-link mx-2" href="/user/register">Cadastrar</a>
+        <a class="nav-link mx-2" aria-current="page" href="{{ url_for(product.list_all)}}">Lista de Produtos</a>
+        <a class="nav-link mx-2" href="{{ url_for('user.login') }}">Entrar</a>
+        <a class="nav-link mx-2" href="{{ url_for('user.register') }}">Cadastrar</a>
       </div>
       <div class="navbar-nav ms-auto">
         {% if current_user.is_authenticated %}
         <span class="navbar-text mx-2 text-white">Autenticado como <strong>{{ current_user.username }}</strong></span>
-        <a class="nav-link me mx-2" href="/user/logout">Sair</a>
+        <a class="nav-link me mx-2" href="{{ url_for('api.dashboard') }}">API Token</a>
+        <a class="nav-link me mx-2" href="{{ url_for('user.logout') }}">Sair</a>
         {% endif %}
       </div>
     </div>

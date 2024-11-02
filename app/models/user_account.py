@@ -27,11 +27,11 @@ class UserAccount(db.Model, UserMixin):
 
     def __init__(self, username, password, account_type):
         self.username = username
-        self.password = bcrypt.generate_password_hash(password)
+        self.password = bcrypt.generate_password_hash(password).decode('utf-8')
         self.account_type = account_type
 
     def set_password(self, password):
-        self.password = bcrypt.generate_password_hash(password)
+        self.password = bcrypt.generate_password_hash(password).decode('utf-8')
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password, password)

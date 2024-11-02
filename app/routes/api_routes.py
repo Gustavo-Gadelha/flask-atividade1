@@ -1,5 +1,6 @@
-from flask import jsonify, request, Blueprint
+from flask import jsonify, request, Blueprint, render_template
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
+from flask_login import login_required, current_user
 from marshmallow import ValidationError
 
 from app import db
@@ -11,7 +12,14 @@ from app.schemas.user_account import user_accounts_schema, user_account_schema
 api_bp = Blueprint('api', __name__)
 
 
-@api_bp.route('/login/token', methods=['GET'])
+@api_bp.route('/dashboard', methods=['GET'])
+@login_required
+def dashboard():
+    access_token = create_access_token(identity=user_account_schema.dump(current_user))
+    return render_template('api/dashboard.html', access_token=access_token)
+
+
+@api_bp.route('/user/token', methods=['POST'])
 def get_token():
     data = request.json
     if not data or 'username' not in data or 'password' not in data:
@@ -47,7 +55,6 @@ def insert_product():
         product = product_schema.load(data)
     except ValidationError as err:
         return jsonify(err.messages), 400
-
 
     if user.account_type == AccountType.NORMAL:
         product_count = Product.query.filter_by(user_id=user.id).count()

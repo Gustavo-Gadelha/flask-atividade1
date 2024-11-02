@@ -11,7 +11,7 @@ from app.config import DevelopmentConfig, ProductionConfig
 db = SQLAlchemy()
 ma = Marshmallow()
 bcrypt = Bcrypt()
-jwt  = JWTManager()
+jwt = JWTManager()
 
 
 def create_app():
@@ -28,7 +28,7 @@ def create_app():
     jwt.init_app(app)
 
     # TODO: use flask-Migrate to make migrations instead of overwriting the database on update
-    from .models import UserAccount, product
+    from .models import UserAccount, Product
     with app.app_context():
         db.create_all()
 
@@ -37,13 +37,13 @@ def create_app():
     app.register_blueprint(product_bp, url_prefix='/product')
     app.register_blueprint(api_bp, url_prefix='/api')
 
-    from .schemas import ProductSchema
+    from .schemas import UserAccountSchema, ProductSchema
 
     @app.route('/')
     def index():
         return redirect(url_for('product.list_all'))
 
-    from app.auth import login_manager
+    from .auth import login_manager
     login_manager.init_app(app)
 
     return app
