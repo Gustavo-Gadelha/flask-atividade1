@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, request, render_template, url_for
+from flask import Blueprint, redirect, request, render_template, url_for, jsonify
 from flask_login import login_required, current_user
 
 from app import db
@@ -24,5 +24,22 @@ def register():
         product = Product(name, quantity, price, current_user.id)
         db.session.add(product)
         db.session.commit()
+
+    return redirect(url_for('.list_all'))
+
+
+@product_bp.route('/delete/<int:product_id>', methods=['POST'])
+@login_required
+def delete(product_id):
+    product = Product.query.get(product_id)
+
+    if not product:
+        return redirect(url_for('.list_all'))
+
+    if current_user.is_admin:
+        db.session.delete(product)
+        db.session.commit()
+    else:
+        return jsonify({'error': 'Você não tem permissão para deletar este produto'}), 403
 
     return redirect(url_for('.list_all'))

@@ -25,6 +25,9 @@
       <th>Quantidade</th>
       <th>Preço</th>
       <th>Vendedor</th>
+      {% if current_user.is_admin %}
+      <th>Ações</th>
+      {% endif %}
     </tr>
     </thead>
     <tbody>
@@ -35,6 +38,13 @@
       <td>{{ product.quantity }}</td>
       <td>R$ {{ product.price }}</td>
       <td>{{ product.user.username }}</td>
+      {% if current_user.is_admin %}
+      <td>
+        <form method="POST" action="{{ url_for('product.delete', product_id=product.id) }}">
+          <button type="submit" class="btn btn-danger btn-sm">Deletar</button>
+        </form>
+      </td>
+      {% endif %}
     </tr>
     {% endfor %}
     </tbody>
