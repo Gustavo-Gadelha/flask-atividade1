@@ -28,14 +28,15 @@ def create_app():
     jwt.init_app(app)
 
     # TODO: use flask-Migrate to make migrations instead of overwriting the database on update
-    from .models import UserAccount, Product
+    from .models import UserAccount, Product, Sales
     with app.app_context():
         db.create_all()
 
-    from .routes import user_bp, product_bp, api_bp
+    from .routes import user_bp, product_bp, api_bp, sales_bp
     app.register_blueprint(user_bp, url_prefix='/user')
     app.register_blueprint(product_bp, url_prefix='/product')
     app.register_blueprint(api_bp, url_prefix='/api')
+    app.register_blueprint(sales_bp, url_prefix='/sales')
 
     from .schemas import UserAccountSchema, ProductSchema
 

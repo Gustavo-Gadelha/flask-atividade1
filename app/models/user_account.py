@@ -8,6 +8,7 @@ from app import db, bcrypt
 
 NORMAL_ACCOUNT_MAX_PRODUCTS = 3
 
+
 class AccountType(enum.Enum):
     NORMAL = 'normal'
     SUPER = 'super'
@@ -35,3 +36,6 @@ class UserAccount(db.Model, UserMixin):
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password, password)
+
+    def __repr__(self):
+        return f"<UserAccount(id={self.id}, username='{self.username}', account_type='{self.account_type}', is_admin={self.is_admin})>"

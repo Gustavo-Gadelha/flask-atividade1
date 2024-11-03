@@ -25,6 +25,7 @@
     <th>Nome</th>
     <th>Quantidade</th>
     <th>Preço</th>
+    <th>Vendedor</th>
   </tr>
   </thead>
   <tbody>
@@ -33,7 +34,8 @@
     <td>{{ product.id }}</td>
     <td>{{ product.name }}</td>
     <td>{{ product.quantity }}</td>
-    <td>R${{ product.price }}</td>
+    <td>R$ {{ product.price }}</td>
+    <td>{{ product.user.username }}</td>
   </tr>
   {% endfor %}
   </tbody>

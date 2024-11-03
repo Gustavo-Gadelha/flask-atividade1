@@ -3,13 +3,14 @@
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
+    <div class="collapse navbar-collapse" id="navbarRight">
       <div class="navbar-nav me-auto">
-        <a class="nav-link mx-2" aria-current="page" href="{{ url_for('product.list_all') }}">Lista de Produtos</a>
+        <a class="nav-link mx-2" href="{{ url_for('product.list_all') }}">Produtos</a>
+        <a class="nav-link mx-2" href="{{ url_for('sales.plot_figure') }}">Gráfico de vendas</a>
         <a class="nav-link mx-2" href="{{ url_for('user.login') }}">Entrar</a>
         <a class="nav-link mx-2" href="{{ url_for('user.register') }}">Cadastrar</a>
       </div>
-      <div class="navbar-nav ms-auto">
+      <div class="navbar-nav ms-auto" id="navbarLeft">
         {% if current_user.is_authenticated %}
         <span class="navbar-text mx-2 text-white">Autenticado como <strong>{{ current_user.username }}</strong></span>
         <a class="nav-link me mx-2" href="{{ url_for('api.dashboard') }}">API Token</a>

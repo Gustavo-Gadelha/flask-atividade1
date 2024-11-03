@@ -23,3 +23,6 @@ class Product(db.Model):
         self.quantity = quantity
         self.price = price
         self.user_id = user_id
+
+    def __repr__(self):
+        return f"<Product(id={self.id}, name='{self.name}', quantity={self.quantity}, price={self.price})>"
