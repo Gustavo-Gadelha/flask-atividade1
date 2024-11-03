@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, url_for, redirect
+from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from flask_marshmallow import Marshmallow
@@ -30,17 +30,12 @@ def create_app():
     bcrypt.init_app(app)
     jwt.init_app(app)
 
-    from .routes import user_bp, product_bp, api_bp, sales_bp
+    from .routes import base_bp, user_bp, product_bp, api_bp, sales_bp
+    app.register_blueprint(base_bp, url_prefix='/')
     app.register_blueprint(user_bp, url_prefix='/user')
     app.register_blueprint(product_bp, url_prefix='/product')
     app.register_blueprint(api_bp, url_prefix='/api')
     app.register_blueprint(sales_bp, url_prefix='/sales')
-
-    from .schemas import UserAccountSchema, ProductSchema
-
-    @app.route('/')
-    def index():
-        return redirect(url_for('product.list_all'))
 
     from .auth import login_manager
     login_manager.init_app(app)
