@@ -1,12 +1,14 @@
 {% with messages = get_flashed_messages(category_filter=['error']) %}
 {% if messages %}
-<div class="alert alert-warning alert-dismissible fade show my-3" role="alert">
-  <h4 class="alert-heading">Aviso</h4>
-  <hr>
+<div class="alert alert-warning alert-dismissible fade show my-3 p-4 rounded shadow-sm" role="alert">
+  <div class="d-flex align-items-center mb-2">
+    <h4 class="alert-heading mb-0 me-2">Alerta</h4>
+    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <hr class="mt-2 mb-3">
   {% for message in messages %}
-  <p class="ml-1 mb-1">{{ message }}</p>
+  <p class="ms-1 mb-1">{{ message }}</p>
   {% endfor %}
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 {% endif %}
 {% endwith %}

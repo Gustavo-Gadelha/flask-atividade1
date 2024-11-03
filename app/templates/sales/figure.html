@@ -3,24 +3,23 @@
 {% block title %}Gráfico de vendas{% endblock %}
 
 {% block body %}
-<div class="container my-5">
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <h2 class="text-center mb-4">Gráfico de vendas</h2>
-      {% if figure %}
-      <p class="text-center text-muted mb-4">
-        Este website ainda não suporta operações de vendas ou compras<br>
-        O gráfico abaixo é apenas uma prévia de possíveis funcionalidades futuras
-      </p>
-      <div class="card shadow-lg">
-        <div class="card-body text-center">
-          {{ figure | safe }}
-        </div>
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <h2 class="text-center mb-4">Gráfico de vendas</h2>
+    <p class="text-center text-muted mb-4">
+      Este website ainda não suporta operações de vendas ou compras<br>
+      O gráfico abaixo é apenas uma prévia de possíveis funcionalidades futuras
+    </p>
+
+    {% if figure %}
+    <div class="card shadow-lg">
+      <div class="card-body text-center">
+        {{ figure | safe }}
       </div>
-      {% else %}
-      <p class="text-center">Nenhum dado disponível para exibir o gráfico</p>
-      {% endif %}
     </div>
+    {% else %}
+    <p class="text-center text-danger">Nenhum dado disponível para exibir o gráfico</p>
+    {% endif %}
   </div>
 </div>
 {% endblock %}

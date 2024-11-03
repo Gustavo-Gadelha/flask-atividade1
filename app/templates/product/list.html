@@ -2,43 +2,47 @@
 
 {% block title %}Produtos{% endblock %}
 
-{% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/product_list.css')}}">
-{% endblock %}
-
 {% block body %}
-{% if products %}
 <h1 class="text-center mb-4">Lista de produtos</h1>
-{% else %}
-<h1 class="text-center mb-4">Início</h1>
-{% endif %}
 
 {% if current_user.is_authenticated %}
-{% include 'product/register.html' %}
+<div class="mb-4">
+  {% include 'product/register.html' %}
+</div>
+{% else %}
+<p class="text-center text-muted mb-4">
+  Faça login para poder registrar novos produtos e acessar outras funcionalidades
+</p>
 {% endif %}
 
 {% if products %}
-<table class="table table-striped">
-  <thead>
-  <tr>
-    <th>ID</th>
-    <th>Nome</th>
-    <th>Quantidade</th>
-    <th>Preço</th>
-    <th>Vendedor</th>
-  </tr>
-  </thead>
-  <tbody>
-  {% for product in products %}
-  <tr>
-    <td>{{ product.id }}</td>
-    <td>{{ product.name }}</td>
-    <td>{{ product.quantity }}</td>
-    <td>R$ {{ product.price }}</td>
-    <td>{{ product.user.username }}</td>
-  </tr>
-  {% endfor %}
-  </tbody>
-</table>
+<div class="table-responsive">
+  <table class="table table-striped shadow-sm">
+    <thead class="table-dark">
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>Quantidade</th>
+      <th>Preço</th>
+      <th>Vendedor</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for product in products %}
+    <tr>
+      <td>{{ product.id }}</td>
+      <td>{{ product.name }}</td>
+      <td>{{ product.quantity }}</td>
+      <td>R$ {{ product.price }}</td>
+      <td>{{ product.user.username }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p class="text-center text-muted mt-4">
+  Nenhum produto disponível no momento
+</p>
 {% endif %}
 {% endblock %}

@@ -1,8 +1,9 @@
 from flask import Blueprint, redirect, request, render_template, url_for
 from flask_login import login_required, current_user
 
-from app import validation, db
+from app import db
 from app.models import Product
+from app.validation import validate_product
 
 product_bp = Blueprint('product', __name__)
 
@@ -15,13 +16,11 @@ def list_all():
 @product_bp.route('/register', methods=['POST'])
 @login_required
 def register():
-    name: str = request.form.get('product-name')
-    quantity: str = request.form.get('quantity')
-    price: str = request.form.get('price')
+    name = request.form.get('product-name')
+    quantity = request.form.get('quantity')
+    price = request.form.get('price')
 
-    validation.validade_product(name, quantity, price, current_user.id)
-
-    if not validation.has_errors():
+    if validate_product(name, quantity, price, current_user.id):
         product = Product(name, quantity, price, current_user.id)
         db.session.add(product)
         db.session.commit()

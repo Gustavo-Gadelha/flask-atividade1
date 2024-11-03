@@ -10,7 +10,7 @@
     {% include 'components/success_messages.html' %}
     {% include 'components/error_messages.html' %}
 
-    <form id="registerForm" method="POST" action="{{ url_for('user.register') }}">
+    <form method="POST" action="{{ url_for('user.register') }}">
       <div class="mb-3">
         <label for="username" class="form-label">Usuário</label>
         <input type="text" class="form-control" id="username" name="username" required>
@@ -27,8 +27,8 @@
         <input type="checkbox" class="form-check-input" id="is-super" name="is-super">
         <label class="form-check-label" for="is-super">Produtos ilimitados</label>
       </div>
-      <div class="d-grid">
-        <button type="submit" class="btn btn-primary">Realizar cadastro</button>
+      <div class="mb-3 d-grid">
+        <button type="submit" class="btn btn-primary btn-lg">Realizar cadastro</button>
       </div>
     </form>
   </div>

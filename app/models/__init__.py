@@ -1,3 +1,3 @@
 from .product import Product
 from .sales import Sales
-from .user_account import UserAccount
+from .user_account import UserAccount, AccountType
