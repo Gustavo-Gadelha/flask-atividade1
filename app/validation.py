@@ -14,7 +14,7 @@ def validate_user(username: str, password: str, confirm_password: str):
         flash('Não use espaços em branco no inicio ou no final do seu nome de usuário', ERROR_MESSAGE)
     if len(username) < 5 or len(username) > 255:
         flash('O nome de usuário deve ter entre 5 e 255 caracteres', ERROR_MESSAGE)
-    if not re.match("^[a-zA-Z0-9_]+(?: [a-zA-Z0-9_]+)*$", username):
+    if not re.match(r"^[a-zA-Z0-9_À-ÿ]+(?: [a-zA-Z0-9_À-ÿ]+)*$", username):
         flash('O nome de usuário só pode conter letras, números, sublinhados, e espaços entre palavras', ERROR_MESSAGE)
     if UserAccount.query.filter_by(username=username).count() > 0:
         flash('Já existe um usuário com esse nome', ERROR_MESSAGE)
