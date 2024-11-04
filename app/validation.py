@@ -2,7 +2,7 @@ import re
 
 from flask import flash, session
 
-from app.models import UserAccount, Product
+from app.models import UserAccount, Product, AccountType
 from app.models.user_account import NORMAL_ACCOUNT_MAX_PRODUCTS
 
 SUCCESS_MESSAGE: str = 'success'
@@ -44,7 +44,7 @@ def validate_product(product_name: str, quantity: str, price: str, user_id: int)
     elif float(price) < 1:
         flash('O preço do produto deve ser maior ou igual a R$ 1,00', ERROR_MESSAGE)
 
-    if UserAccount.query.get(user_id).account_type == 'normal':
+    if UserAccount.query.get(user_id).account_type == AccountType.NORMAL:
         product_count = Product.query.filter_by(user_id=user_id).count()
         if product_count >= NORMAL_ACCOUNT_MAX_PRODUCTS:
             flash('Usuários normais não podem cadastrar mais de 3 produtos', ERROR_MESSAGE)
