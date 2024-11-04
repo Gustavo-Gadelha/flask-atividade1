@@ -10,8 +10,9 @@
       Esta página permite que você obtenha um token de acesso JWT, necessário para autenticar suas requisições à API,
       recarregue a página para obter um novo token de acesso
     </p>
+
     {% if access_token %}
-    <div class="card shadow-sm">
+    <div class="card shadow-sm mb-4">
       <div class="card-body">
         <h5 class="card-title">Token JWT</h5>
         <div class="bg-light p-3 rounded">
@@ -20,9 +21,9 @@
       </div>
     </div>
     {% else %}
-    <div class="alert alert-warning mt-3" role="alert">
-      <strong>Error:</strong> Token de acesso indisponível
-    </div>
+    <p class="text-center text-muted mt-4">
+      Token de acesso indisponível no momento
+    </p>
     {% endif %}
   </div>
 </div>

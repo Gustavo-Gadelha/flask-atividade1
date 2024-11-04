@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Token API{% endblock %}
+
+{% block body %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <h2 class="text-center mb-4">Uso da API</h2>
+    <p class="text-center text-muted mb-4">
+      Acesse a página <strong>Token API</strong> ou
+      envie suas credenciais para <code>POST /api/token</code> para obter um token JWT
+    </p>
+
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <div class="fw-bold">Inserir Produto - <code>POST /api/products</code></div>
+        <p>Use este endpoint para adicionar um novo produto</p>
+      </li>
+      <li class="list-group-item">
+        <div class="fw-bold">Buscar Produto - <code>GET /api/products/{id}</code> ou <code>GET /api/products/{nome}</code></div>
+        <p>Use este endpoint para buscar um produto por ID ou nome</p>
+      </li>
+      <li class="list-group-item">
+        <div class="fw-bold">Listar Produtos - <code>GET /api/products</code></div>
+        <p>Use este endpoint para obter uma lista de todos os produtos</p>
+      </li>
+      <li class="list-group-item">
+        <div class="fw-bold">Listar Usuários - <code>GET /api/users</code></div>
+        <p>Use este endpoint para obter uma lista de todos os usuários</p>
+      </li>
+    </ul>
+  </div>
+</div>
+{% endblock %}

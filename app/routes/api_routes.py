@@ -19,7 +19,13 @@ def dashboard():
     return render_template('api/dashboard.html', access_token=access_token)
 
 
-@api_bp.route('/user/token', methods=['POST'])
+@api_bp.route('/docs', methods=['GET'])
+@login_required
+def docs():
+    return render_template('api/docs.html')
+
+
+@api_bp.route('/api/token', methods=['POST'])
 def get_token():
     data = request.json
     if not data or 'username' not in data or 'password' not in data:
@@ -40,7 +46,7 @@ def get_token():
         return jsonify({'error': 'Senha incorreta. Por favor, tente novamente'}), 401
 
 
-@api_bp.route('/products/insert', methods=['POST'])
+@api_bp.route('/products', methods=['POST'])
 @jwt_required()
 def insert_product():
     data = request.json
@@ -68,7 +74,7 @@ def insert_product():
     return jsonify(product_schema.dump(product)), 200
 
 
-@api_bp.route('/products/id/<int:product_id>', methods=['GET'])
+@api_bp.route('/products/<int:product_id>', methods=['GET'])
 @jwt_required()
 def get_product_by_id(product_id):
     product = Product.query.get(product_id)
@@ -81,7 +87,7 @@ def get_product_by_id(product_id):
         }), 404
 
 
-@api_bp.route('/products/name/<string:product_name>', methods=['GET'])
+@api_bp.route('/products/<string:product_name>', methods=['GET'])
 @jwt_required()
 def get_product_by_name(product_name):
     products = Product.query.filter_by(name=product_name).all()
