@@ -24,8 +24,8 @@ months_translation = {
 }
 
 
-@sales_bp.route('/figure', methods=['GET'])
-def plot_figure():
+@sales_bp.route('/chart', methods=['GET'])
+def chart():
     sales_results = db.session.query(
         func.extract('month', Sales.date).label('month'),
         Sales.product_name,
@@ -45,4 +45,4 @@ def plot_figure():
         markers=True
     )
 
-    return render_template('sales/figure.html', figure=figure.to_html())
+    return render_template('sales/chart.html', figure=figure.to_html())

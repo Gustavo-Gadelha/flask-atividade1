@@ -15,7 +15,7 @@
         <a class="nav-link mx-2" href="{{ url_for('product.list_all') }}">
           <i class="bi bi-box"></i> Produtos
         </a>
-        <a class="nav-link mx-2" href="{{ url_for('sales.plot_figure') }}">
+        <a class="nav-link mx-2" href="{{ url_for('sales.chart') }}">
           <i class="bi bi-graph-up"></i> Gráfico de vendas
         </a>
         {% if current_user.is_authenticated %}

@@ -25,7 +25,7 @@ def docs():
     return render_template('api/docs.html')
 
 
-@api_bp.route('/api/token', methods=['POST'])
+@api_bp.route('/token', methods=['POST'])
 def get_token():
     data = request.json
     if not data or 'username' not in data or 'password' not in data:
