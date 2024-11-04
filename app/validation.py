@@ -14,7 +14,7 @@ def validate_user(username: str, password: str, confirm_password: str):
         flash('Não use espaços em branco no inicio ou no final do seu nome de usuário', ERROR_MESSAGE)
     if len(username) < 5 or len(username) > 255:
         flash('O nome de usuário deve ter entre 5 e 255 caracteres', ERROR_MESSAGE)
-    if not re.match(r"^[a-zA-Z0-9_À-ÿ]+(?: [a-zA-Z0-9_À-ÿ]+)*$", username):
+    if not re.match(r'^[a-zA-Z0-9_À-ÿ]+(?: [a-zA-Z0-9_À-ÿ]+)*$', username):
         flash('O nome de usuário só pode conter letras, números, sublinhados, e espaços entre palavras', ERROR_MESSAGE)
     if UserAccount.query.filter_by(username=username).count() > 0:
         flash('Já existe um usuário com esse nome', ERROR_MESSAGE)
@@ -32,22 +32,29 @@ def validate_user(username: str, password: str, confirm_password: str):
 
 def validate_product(product_name: str, quantity: str, price: str, user_id: int):
     if product_name != product_name.strip():
-        flash('Não use espaços em branco no início ou no final do nome do produto', ERROR_MESSAGE)
+        flash('O nome do produto não deve conter espaços em branco no início ou no final.', ERROR_MESSAGE)
+    if len(product_name) < 5 or len(product_name) > 60:
+        flash('O nome do produto deve ter entre 5 e 60 caracteres.', ERROR_MESSAGE)
+    if not re.match(r'^[a-zA-Z0-9_À-ÿ]+(?: [a-zA-Z0-9_À-ÿ]+)*$', product_name):
+        flash(
+            'O nome do produto deve conter apenas letras, números e underscores, podendo incluir espaços entre as palavras.',
+            ERROR_MESSAGE)
 
     if not quantity.isdecimal() or int(quantity) <= 0:
         flash('A quantidade do produto deve ser um número inteiro positivo não-nulo', ERROR_MESSAGE)
-    elif int(quantity) < 1:
-        flash('A quantidade do produto deve ser ser maior ou igual a 1', ERROR_MESSAGE)
+    elif len(quantity) > 10:
+        flash('A quantidade do produto não pode exceder 10 dígitos', ERROR_MESSAGE)
 
-    if not re.match(r'^\d+(\.\d{1,2})?$', price) or float(price) <= 0:
-        flash('O preço do produto deve ser um número positivo não-nulo com até duas casas decimais', ERROR_MESSAGE)
-    elif float(price) < 1:
-        flash('O preço do produto deve ser maior ou igual a R$ 1,00', ERROR_MESSAGE)
+    if not re.match(r'^\d{1,10}(\.\d{1,2})?$', price) or float(price) <= 0:
+        flash(
+            'O preço do produto deve ser um número positivo não-nulo com até 10 dígitos antes do ponto decimal e até duas casas decimais',
+            ERROR_MESSAGE)
 
     if UserAccount.query.get(user_id).account_type == AccountType.NORMAL:
         product_count = Product.query.filter_by(user_id=user_id).count()
         if product_count >= NORMAL_ACCOUNT_MAX_PRODUCTS:
             flash('Usuários normais não podem cadastrar mais de 3 produtos', ERROR_MESSAGE)
+
     if Product.query.filter_by(name=product_name, user_id=user_id).first():
         return flash('Um produto com este nome já existe para este usuário', ERROR_MESSAGE)
 
@@ -63,12 +70,18 @@ def validate_product_api(data):
             errors[field] = f'O campo {field} é obrigatório'
 
     if 'quantity' in data:
-        if not isinstance(data['quantity'], int) or data['quantity'] < 1:
+        quantity = data['quantity']
+        if not isinstance(quantity, int) or quantity < 1:
             errors['quantity'] = 'A quantidade deve ser um número inteiro positivo maior ou igual a 1'
+        elif len(str(quantity)) > 10:
+            errors['quantity'] = 'A quantidade do produto não pode exceder 10 dígitos'
 
     if 'price' in data:
-        if not isinstance(data['price'], (int, float)) or data['price'] < 1:
-            errors['quantity'] = 'O preço total deve ser maior ou igual a R$ 1,00'
+        price = data['price']
+        if not isinstance(price, (int, float)) or price <= 0:
+            errors['price'] = 'O preço total deve ser um número inteiro positivo não-nulo'
+        elif len(str(int(price))) > 10:
+            errors['price'] = 'O preço do produto não pode exceder 10 dígitos antes do ponto decimal'
 
     return errors
 

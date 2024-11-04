@@ -33,10 +33,10 @@ def login():
         if user.check_password(password):
             login_user(user)
             flash('Usuário autenticado com sucesso', validation.SUCCESS_MESSAGE)
+            return redirect(url_for('product.list_all'))
         else:
             flash('Senha inválida. Por favor, tente novamente', validation.ERROR_MESSAGE)
-
-        return redirect(url_for('.login'))
+            return redirect(url_for('.login'))
 
 
 @user_bp.route('/register', methods=['GET', 'POST'])
