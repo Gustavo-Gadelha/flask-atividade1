@@ -61,31 +61,6 @@ def validate_product(product_name: str, quantity: str, price: str, user_id: int)
     return not _has_errors()
 
 
-def validate_product_api(data):
-    errors = {}
-
-    required_fields = ['name', 'quantity', 'price']
-    for field in required_fields:
-        if field not in data:
-            errors[field] = f'O campo {field} é obrigatório'
-
-    if 'quantity' in data:
-        quantity = data['quantity']
-        if not isinstance(quantity, int) or quantity < 1:
-            errors['quantity'] = 'A quantidade deve ser um número inteiro positivo maior ou igual a 1'
-        elif len(str(quantity)) > 10:
-            errors['quantity'] = 'A quantidade do produto não pode exceder 10 dígitos'
-
-    if 'price' in data:
-        price = data['price']
-        if not isinstance(price, (int, float)) or price <= 0:
-            errors['price'] = 'O preço total deve ser um número inteiro positivo não-nulo'
-        elif len(str(int(price))) > 10:
-            errors['price'] = 'O preço do produto não pode exceder 10 dígitos antes do ponto decimal'
-
-    return errors
-
-
 def _has_errors():
     if (messages := session.get('_flashes')) is not None:
         error_messages = [message for category, message in messages if category == ERROR_MESSAGE]

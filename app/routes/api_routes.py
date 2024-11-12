@@ -57,9 +57,6 @@ def insert_product():
 
     data['user_id'] = user.id
 
-    if errors := validate_product_api(data):
-        return jsonify({'errors': errors}), 400
-
     try:
         product = product_schema.load(data)
     except ValidationError as err:
