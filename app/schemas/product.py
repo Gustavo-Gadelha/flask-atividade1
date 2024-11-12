@@ -12,7 +12,6 @@ class ProductSchema(ma.SQLAlchemySchema):
     quantity = ma.auto_field(required=True)
     price = ma.auto_field(required=True)
     user_id = ma.auto_field(required=True)
-
     created_at = ma.auto_field(dump_only=True)
     updated_at = ma.auto_field(dump_only=True)
 

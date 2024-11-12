@@ -1,3 +1,5 @@
+{% set login_required = 'disabled' if not current_user.is_authenticated else '' %}
+
 <nav class="navbar navbar-dark bg-dark navbar-expand-lg sticky-top">
   <div class="container-fluid">
     <span class="navbar-brand  mx-2">
@@ -18,14 +20,12 @@
         <a class="nav-link mx-2" href="{{ url_for('sales.chart') }}">
           <i class="bi bi-graph-up"></i> Gráfico de vendas
         </a>
-        {% if current_user.is_authenticated %}
-        <a class="nav-link mx-2" href="{{ url_for('api.dashboard') }}">
+        <a class="nav-link mx-2 {{ login_required }}" href="{{ url_for('api.dashboard') }}">
           <i class="bi bi-key"></i> Token API
         </a>
-        <a class="nav-link mx-2" href="{{ url_for('api.docs') }}">
+        <a class="nav-link mx-2 {{ login_required }}" href="{{ url_for('api.docs') }}">
           <i class="bi bi-book"></i> Uso da API
         </a>
-        {% endif %}
       </div>
 
       <!-- Right Navigation Links -->
