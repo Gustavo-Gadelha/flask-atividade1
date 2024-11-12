@@ -7,7 +7,6 @@ from app import db
 from app.models import Product, UserAccount
 from app.schemas.product import products_schema, product_schema
 from app.schemas.user_account import user_accounts_schema, user_account_schema
-from app.validation import validate_product_api
 
 api_bp = Blueprint('api', __name__)
 
